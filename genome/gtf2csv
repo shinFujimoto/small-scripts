@@ -1,0 +1,14 @@
+# -------------------------------------------------------------
+# Date: 2025/01/30
+# Author: FUJIMOTO Shingo
+# -------------------------------------------------------------
+
+# GTF形式ファイルからの遺伝子リストの取得
+# GTFファイルからCSV形式への変換には、gtf2csvを使用
+# インストールには、pipを使用したが詳細は省略
+https://github.com/zyxue/gtf2csv
+
+# GTFはそれぞれの遺伝子領域全体の範囲を定義する行だけを抽出
+# GTFファイル中には、トランスクリプト, Exon, CDS の範囲の情報もふくまれるのでそれらは重複している
+awk '$3 == "gene"' input.gtf > output_genes.gtf
+gtf2csv -f output_genes.gtf -o output_genes.gtf.csv
