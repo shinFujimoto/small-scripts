@@ -11,6 +11,6 @@
 samtools depth [input.bam] -r [chrosome] -a > output_cov.txt
 
 # 出力結果のテキストファイルが大きいので、
-# カバレッジを記録した3列目の数値を10行ごとに平均してファイルを軽くする
-awk '{sum += $3; count++; first_col=$1; second_col=$2; if (count == 10) \
+# カバレッジを記録した3列目の数値を100行ごとに平均してファイルを軽くする
+awk '{sum += $3; count++; first_col=$1; second_col=$2; if (count == 100) \
 {print first_col, second_col, sum / count; sum = 0; count = 0}}' output_cov.txt > output_cov_10bp.txt
