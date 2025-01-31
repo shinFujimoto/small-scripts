@@ -1,0 +1,11 @@
+# ----------------------------------------------------
+# coverageCalc
+#
+# Date: 2025/01/31
+# Author: 藤本　真悟 FUJIMOTO Shingo
+# ----------------------------------------------------
+# samtools depth を使って、bp 単位でのリードデプスを集計する
+# https://www.htslib.org/download/
+# -r: 特定の染色体を指定 chr:start-end で範囲指定もできる
+# -a: ポジションごとの集計を指定する
+samtools depth [input.bam] -r [chrosome] -a > output_cov.txt
