@@ -15,8 +15,10 @@ samtools depth [input.bam] -r [chrosome] -a > output_cov.txt
 awk '{sum += $3; count++; first_col=$1; second_col=$2; if (count == 100) \
 {print first_col, second_col, sum / count; sum = 0; count = 0}}' output_cov.txt > output_cov_100bp.txt
 
+# ----------------------------------------------------
 # 以下は、テキストファイルを読み込んで、X軸をポジション、Y軸をカバレッジで描いた散布図
-# R言語のスクリプト
+# R言語のスクリプトで記載
+# ----------------------------------------------------
 
 # 100 bp averageで出力したテキストファイルリストの読み込み
 fileList <- list.files(pattern = "100bp")
@@ -27,9 +29,10 @@ options(scipen=2)
 
 fileNum <- 1 # 読み込みたいファイル名に対応したベクトルの数値
 tempDF <- read.table(fileList[fileNum]) 
-plotY_limit <- 100
+plotY_limit <- 100 # Y軸の最大値を指定
+# 散布図の作図
 plot(tempDF$V2, tempDF$V3, type = "l", las = 1,
      xlab = "Position in chromosome ", ylab = "Read depth", ylim = c(0, plotY_limit), xlim = c (0, 10000000))
-mtext(text = sampleName[fileNum], side = 3, adj = 0, line = 0.5, cex = 0.8)
-lines(c(2500000, 2500000), c(plotY_limit, plotY_limit), col = "gray", lwd = 3)
-lines(c(2500000, 2500000), c(plotY_limit, plotY_limit), col = "gray", lwd = 3)
+mtext(text = sampleName[fileNum], side = 3, adj = 0, line = 0.5, cex = 0.8) # サンプル名を図の左上に配置
+# 注目する遺伝領域の範囲を示した線の追加
+lines(c(2500000, 3500000), c(plotY_limit, plotY_limit), col = "gray", lwd = 3)
