@@ -11,6 +11,25 @@
 samtools depth [input.bam] -r [chrosome] -a > output_cov.txt
 
 # 出力結果のテキストファイルが大きいので、
-# カバレッジを記録した3列目の数値を100行ごとに平均してファイルを軽くする
+# カバレッジ(=Read depth)を記録した3列目の数値を100行ごとに平均してファイルを軽くする
 awk '{sum += $3; count++; first_col=$1; second_col=$2; if (count == 100) \
-{print first_col, second_col, sum / count; sum = 0; count = 0}}' output_cov.txt > output_cov_10bp.txt
+{print first_col, second_col, sum / count; sum = 0; count = 0}}' output_cov.txt > output_cov_100bp.txt
+
+# 以下は、テキストファイルを読み込んで、X軸をポジション、Y軸をカバレッジで描いた散布図
+# R言語のスクリプト
+
+# 100 bp averageで出力したテキストファイルリストの読み込み
+fileList <- list.files(pattern = "100bp")
+sampleName <- sapply(1:length(fileList), function(x) { strsplit(fileList[x], split = "_")[[1]][1] } )
+
+# X軸の表記を指数→整数
+options(scipen=2)
+
+fileNum <- 1 # 読み込みたいファイル名に対応したベクトルの数値
+tempDF <- read.table(fileList[fileNum]) 
+plotY_limit <- 100
+plot(tempDF$V2, tempDF$V3, type = "l", las = 1,
+     xlab = "Position in chromosome ", ylab = "Read depth", ylim = c(0, plotY_limit), xlim = c (0, 10000000))
+mtext(text = sampleName[fileNum], side = 3, adj = 0, line = 0.5, cex = 0.8)
+lines(c(2500000, 2500000), c(plotY_limit, plotY_limit), col = "gray", lwd = 3)
+lines(c(2500000, 2500000), c(plotY_limit, plotY_limit), col = "gray", lwd = 3)
