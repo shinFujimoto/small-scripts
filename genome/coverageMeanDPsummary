@@ -1,0 +1,40 @@
+# ----------------------------------------------------
+# coverageMeanDPsummary
+#
+# Date: 2025/05/08
+# Author: 藤本　真悟 FUJIMOTO Shingo
+# ----------------------------------------------------
+# "samtools coverage" コマンドを使って、BAM ファイルで染色体ごとに集計された、
+# カバレッジと平均リードデプスの値から個体ごとの平均値を計算する
+# input file 名を指定して計算する場合
+# 今回はファイル名の末尾が、[サンプル名]_bqsr_coverage.txt として存在
+
+input_file="ykk-um1_bqsr_coverage.txt"
+ind_coverage=($(cat $input_file | grep "NC_019" | awk '{m+=$6} END{print m/NR;}')) # Coverage
+ind_meanDepth=($(cat $input_file | grep "NC_019" | awk '{m+=$7} END{print m/NR;}')) # Mean depth
+ind_mapMQ=($(cat $input_file | grep "NC_019" | awk '{m+=$8} END{print m/NR;}')) # Mean mapping quality 
+
+# Y-specific region in HdrR strain (Unanchored contig, 000829F, Ichikawa et al. 2017, Nat. Com.)
+ysp_coverage=($(cat $input_file | grep "000829F" | awk '{m+=$6} END{print m/NR;}')) # Coverage
+ysp_meanDepth=($(cat $input_file | grep "000829F" | awk '{m+=$7} END{print m/NR;}')) # Mean depth
+ysp_mapMQ=($(cat $input_file | grep "000829F" | awk '{m+=$8} END{print m/NR;}')) # Mean mapping quality 
+echo $ind_coverage $ind_meanDepth $ind_mapMQ $ysp_coverage $ysp_meanDepth $ysp_mapMQ
+
+
+# カレントディレクトリ中にinput file が複数ある場合、
+# 今回はファイル名の末尾が、[サンプル名]_bqsr_coverage.txt として存在
+
+touch bamStat_bqsrCoverageSummary.txt # 出力結果の保存用ファイル
+ls -1 | grep "_bqsr_coverage.txt" | while read input_file; do
+ ind_coverage=($(cat $input_file | grep "NC_019" | awk '{m+=$6} END{print m/NR;}')) # Coverage
+ ind_meanDepth=($(cat $input_file | grep "NC_019" | awk '{m+=$7} END{print m/NR;}')) # Mean depth
+ ind_mapMQ=($(cat $input_file | grep "NC_019" | awk '{m+=$8} END{print m/NR;}')) # Mean mapping quality
+
+ # Y-specific region in HdrR strain (Unanchored contig, 000829F, Ichikawa et al. 2017, Nat. Com.)
+ ysp_coverage=($(cat $input_file | grep "000829F" | awk '{m+=$6} END{print m/NR;}')) # Coverage
+ ysp_meanDepth=($(cat $input_file | grep "000829F" | awk '{m+=$7} END{print m/NR;}')) # Mean depth
+ ysp_mapMQ=($(cat $input_file | grep "000829F" | awk '{m+=$8} END{print m/NR;}')) # Mean mapping quality
+
+ # bamStat_bqsrCoverageSummary.txt のファイルに保存する
+ echo ${input_file%_bqsr_coverage.txt} $ind_coverage $ind_meanDepth $ind_mapMQ $ysp_coverage $ysp_meanDepth $ysp_mapMQ >> bamStat_bqsrCoverageSummary.txt
+done
