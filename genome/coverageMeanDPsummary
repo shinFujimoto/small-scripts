@@ -17,7 +17,7 @@ ind_mapMQ=($(cat $input_file | grep "NC_019" | awk '{m+=$8} END{print m/NR;}')) 
 # Y-specific region in HdrR strain (Unanchored contig, 000829F, Ichikawa et al. 2017, Nat. Com.)
 ysp_coverage=($(cat $input_file | grep "000829F" | awk '{m+=$6} END{print m/NR;}')) # Coverage
 ysp_meanDepth=($(cat $input_file | grep "000829F" | awk '{m+=$7} END{print m/NR;}')) # Mean depth
-ysp_mapMQ=($(cat $input_file | grep "000829F" | awk '{m+=$8} END{print m/NR;}')) # Mean mapping quality 
+ysp_mapMQ=($(cat $input_file | grep "000829F" | awk '{m+=$9} END{print m/NR;}')) # Mean mapping quality 
 echo $ind_coverage $ind_meanDepth $ind_mapMQ $ysp_coverage $ysp_meanDepth $ysp_mapMQ
 
 
@@ -33,7 +33,7 @@ ls -1 | grep "_bqsr_coverage.txt" | while read input_file; do
  # Y-specific region in HdrR strain (Unanchored contig, 000829F, Ichikawa et al. 2017, Nat. Com.)
  ysp_coverage=($(cat $input_file | grep "000829F" | awk '{m+=$6} END{print m/NR;}')) # Coverage
  ysp_meanDepth=($(cat $input_file | grep "000829F" | awk '{m+=$7} END{print m/NR;}')) # Mean depth
- ysp_mapMQ=($(cat $input_file | grep "000829F" | awk '{m+=$8} END{print m/NR;}')) # Mean mapping quality
+ ysp_mapMQ=($(cat $input_file | grep "000829F" | awk '{m+=$9} END{print m/NR;}')) # Mean mapping quality
 
  # bamStat_bqsrCoverageSummary.txt のファイルに保存する
  echo ${input_file%_bqsr_coverage.txt} $ind_coverage $ind_meanDepth $ind_mapMQ $ysp_coverage $ysp_meanDepth $ysp_mapMQ >> bamStat_bqsrCoverageSummary.txt
