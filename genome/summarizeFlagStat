@@ -10,7 +10,7 @@
 # input file 名を指定して計算する場合
 # 今回はファイル名の末尾が、[サンプル名]_sorted_flagstat.txt として存在している
 
-input_file="HNI_DRR002216_sorted_flagstat.txt"
+input_file="[サンプル名]_sorted_flagstat.txt"
 input_readNum=($(cat $input_file | sed -n 1p | awk '{ print $1 }')) # BAMの全リード数
 properly_paired_readNum=($(cat $input_file | sed -n 12p | awk '{ print $1 }')) # F,Rが適切にマッピングされたリード数
 properly_paired_readRatio=($(cat $input_file | sed -n 12p | awk '{ print $6 }' | grep -E [0-9]+[.][0-9]+ -o))  # F,Rが適切にマッピングされたリード数の割合
